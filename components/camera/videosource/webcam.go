@@ -622,6 +622,11 @@ func (c *webcam) Properties(ctx context.Context) (camera.Properties, error) {
 	if err != nil {
 		return camera.Properties{}, err
 	}
+
+	if c.conf.FrameRate > 0 {
+		props.FrameRate = c.conf.FrameRate
+	}
+
 	// Looking for intrinsics in map built using viam camera
 	// calibration here https://github.com/viam-labs/camera-calibration/tree/main
 	if props.IntrinsicParams == nil {
@@ -668,10 +673,6 @@ func (c *webcam) Properties(ctx context.Context) (camera.Properties, error) {
 			c.hasLoggedIntrinsicsInfo = true
 		}
 		props.IntrinsicParams = &cameraIntrinsics
-
-		if c.conf.FrameRate > 0 {
-			props.FrameRate = c.conf.FrameRate
-		}
 	}
 	return props, nil
 }
